@@ -3,7 +3,6 @@ package day01
 
 import (
 	"fmt"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -11,32 +10,35 @@ import (
 )
 
 func Day01_1(filename string) (result int) {
-	l, r := readFile(filename)
-
-	fmt.Println(l)
-	fmt.Println(r)
-
+	current := 50
+	for line := range utils.InputRows(filename) {
+		parts := strings.SplitAfterN(line, "", 2)
+		num, _ := strconv.Atoi(parts[1])
+		if parts[0] == "R" {
+			current += num
+			for current >= 100 {
+				current -= 100
+			}
+		} else if parts[0] == "L" {
+			current -= num
+			for current < 0 {
+				current += 100
+			}
+		}
+		if current == 0 {
+			result++
+		}
+	}
 	return result
 }
 
 func Day01_2(filename string) (result int) {
-	l, r := readFile(filename)
-
-	fmt.Println(l)
-	fmt.Println(r)
+	for line := range utils.InputRows(filename) {
+		// split line to letter and number, example: "R14" -> "R" and "14"
+		parts := strings.SplitAfterN(line, "", 2)
+		num, _ := strconv.Atoi(parts[1])
+		fmt.Println(parts[0], num)
+	}
 
 	return result
-}
-
-func readFile(filename string) (lList, rList []int) {
-	for line := range utils.InputRows(filename) {
-		s := strings.Split(line, "   ")
-		lInt, _ := strconv.Atoi(s[0])
-		rInt, _ := strconv.Atoi(s[1])
-		lList = append(lList, lInt)
-		rList = append(rList, rInt)
-	}
-	sort.Ints(lList)
-	sort.Ints(rList)
-	return lList, rList
 }
