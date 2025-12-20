@@ -29,7 +29,33 @@ func Day02_1(filename string) (result int) {
 	return result
 }
 
+// Day02_2 - the idea here is to repeatedly modulo divide by powerst of 10 - in the first divide
+// pattern will be created and in the next divides we will search for this pattern
+// if not, then the parttern does not repeat, but if found, move to next power of 10
+// if after all powers of 10 pattern is not found, then the number does not have repeating parts
+// works fine for test data, but for the final data the result is too high...
 func Day02_2(filename string) (result int) {
+	for r := range nextRange(filename) {
+	nextID:
+		for id := range r.nextID() {
+			l := len(fmt.Sprintf("%d", id))
+		nextPattern:
+			for i := 1; i <= l/2; i++ {
+				mod := int(math.Pow(10, float64(i)))
+				pattern := (id % mod)
+				rest := (id / mod)
+				for rest > 0 {
+					searchPart := rest % mod
+					if searchPart != pattern {
+						continue nextPattern
+					}
+					rest /= mod
+				}
+				result += id
+				continue nextID
+			}
+		}
+	}
 	return result
 }
 
