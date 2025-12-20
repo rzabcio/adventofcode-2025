@@ -13,7 +13,7 @@ go mod tidy
 How to run specific puzzle (input files included in /input-files):
 
 ```bash
-go run main.go day*.go day <day:1-25> <part:1/2> <input-file>
+go run . day <day:1-25> <part:1/2> <input-file>
 ```
 
 Because of TDD approach, tests are also included:
