@@ -97,17 +97,26 @@ func InputCols(filename string) (result []string) {
 }
 
 func MinMax(array []int) (int, int) {
+	min, max, _, _ := MinMaxIdx(array)
+	return min, max
+}
+
+func MinMaxIdx(array []int) (int, int, int, int) {
 	max := array[0]
+	maxIdx := 0
 	min := array[0]
-	for _, value := range array {
+	minIdx := 0
+	for i, value := range array {
 		if max < value {
 			max = value
+			maxIdx = i
 		}
 		if min > value {
 			min = value
+			minIdx = i
 		}
 	}
-	return min, max
+	return min, max, minIdx, maxIdx
 }
 
 func Min(array []int) int {
@@ -115,9 +124,19 @@ func Min(array []int) int {
 	return min
 }
 
+func MinIdx(array []int) (int, int) {
+	min, _, minIdx, _ := MinMaxIdx(array)
+	return min, minIdx
+}
+
 func Max(array []int) int {
 	_, max := MinMax(array)
 	return max
+}
+
+func MaxIdx(array []int) (int, int) {
+	_, max, _, maxIdx := MinMaxIdx(array)
+	return max, maxIdx
 }
 
 // func ReverseString(s string) string {
