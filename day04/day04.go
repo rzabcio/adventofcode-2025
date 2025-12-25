@@ -12,6 +12,15 @@ func Day04_1(filename string) (result int) {
 }
 
 func Day04_2(filename string) (result int) {
+	store := NewPaperRollsStore(filename)
+	count := store.CalculateAccessibleRolls()
+	result += count
+
+	for count > 0 {
+		store.RemoveAccessibleRolls()
+		count = store.CalculateAccessibleRolls()
+		result += count
+	}
 	return result
 }
 
@@ -75,4 +84,14 @@ func (store *PaperRollsStore) countNeighbours(x, y int) int {
 		}
 	}
 	return count
+}
+
+func (store *PaperRollsStore) RemoveAccessibleRolls() {
+	for x := range store.Rolls {
+		for y := range store.Rolls[x] {
+			if store.RollCounts[x][y] >= 0 && store.RollCounts[x][y] < 4 {
+				store.Rolls[x][y] = 0
+			}
+		}
+	}
 }
