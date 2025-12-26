@@ -12,6 +12,7 @@ import (
 	"github.com/rzabcio/adventofcode-2025/day02"
 	"github.com/rzabcio/adventofcode-2025/day03"
 	"github.com/rzabcio/adventofcode-2025/day04"
+	"github.com/rzabcio/adventofcode-2025/day05"
 	"github.com/rzabcio/adventofcode-2025/utils"
 )
 
@@ -23,6 +24,7 @@ func main() {
 		"day2_1": day02.Day02_1, "day2_2": day02.Day02_2,
 		"day3_1": day03.Day03_1, "day3_2": day03.Day03_2,
 		"day4_1": day04.Day04_1, "day4_2": day04.Day04_2,
+		"day5_1": day05.Day05_1, "day5_2": day05.Day05_2,
 	}
 
 	day := &cobra.Command{
