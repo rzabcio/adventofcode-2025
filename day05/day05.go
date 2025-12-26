@@ -2,6 +2,7 @@
 package day05
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 
@@ -15,13 +16,20 @@ func Day05_1(filename string) (result int) {
 }
 
 func Day05_2(filename string) (result int) {
+	il := NewIngredientsList(filename)
+	sort.Slice(il.FreshRanges, func(i, j int) bool {
+		return il.FreshRanges[i].From < il.FreshRanges[j].From
+	})
+	il.NormalizeFreshRanges()
+	result = il.CountAllFresh()
 	return result
 }
 
 type IngredientsList struct {
-	Fresh       []int
-	FreshRanges []FreshRange
-	Available   []int
+	Fresh                 []int
+	FreshRanges           []FreshRange
+	NormalizedFreshRanges []FreshRange
+	Available             []int
 }
 
 func NewIngredientsList(filename string) IngredientsList {
@@ -99,6 +107,38 @@ func (il IngredientsList) CountFreshAvailable() int {
 				break
 			}
 		}
+	}
+	return count
+}
+
+func (il *IngredientsList) NormalizeFreshRanges() {
+	il.NormalizedFreshRanges = make([]FreshRange, 0)
+nextFreshRange:
+	for _, fr := range il.FreshRanges {
+		// fmt.Println("Normalizing fresh range:", fr)
+		for i, nfr := range il.NormalizedFreshRanges {
+			// check if fr overlaps with nfr
+			if fr.From <= nfr.To && fr.To >= nfr.From {
+				// fmt.Println("   Overlaps with normalized fresh range:", nfr)
+				// merge ranges
+				nfr.From = utils.Min([]int{nfr.From, fr.From})
+				nfr.To = utils.Max([]int{nfr.To, fr.To})
+				// fmt.Println("   Merged to:", nfr)
+				il.NormalizedFreshRanges[i] = nfr
+				continue nextFreshRange
+				// break
+			}
+		}
+		il.NormalizedFreshRanges = append(il.NormalizedFreshRanges, fr)
+	}
+}
+
+func (il IngredientsList) CountAllFresh() int {
+	count := 0
+	for _, nfr := range il.NormalizedFreshRanges {
+		partialCount := nfr.To - nfr.From + 1
+		// fmt.Println("Counting normalized fresh range:", nfr, "->", partialCount)
+		count += partialCount
 	}
 	return count
 }
